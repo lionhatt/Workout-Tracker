@@ -8,45 +8,48 @@ const workoutSchema = new Schema({
         default: Date.now
     },
 
-    exercises: {
-        type: {
-            type: String,
-            trim: true
-        },
-        name: {
-            type: String,
-            trim: true
-        },
-        duration: {
-            type: Number
-        },
-        distance: {
-            type: Number
-        },
-        weight: {
-            type: Number
-        },
-        reps: {
-            type: Number
-        },
-        sets: {
-            type: Number
-        }
-    },
-
     totalDuration: {
         type: Number
-    }
+    },
+
+    exercises: [
+        {
+            type: {
+                type: String,
+                trim: true
+            },
+            name: {
+                type: String,
+                trim: true
+            },
+            duration: {
+                type: Number
+            },
+            distance: {
+                type: Number
+            },
+            weight: {
+                type: Number
+            },
+            reps: {
+                type: Number
+            },
+            sets: {
+                type: Number
+            },
+        },
+    ],
+
+
 });
 
-workoutSchema.methods.getTotalDuration = function(exercises){
-    let acc = exercises.reduce((acc, curr) => {
+workoutSchema.methods.getTotalDuration = function () {
+    this.totalDuration = this.exercises.reduce((acc, curr) => {
         acc.totalDuration = (acc.totalDuration || 0) + curr.duration;
         return acc;
-    }, {});
-    this.totalDuration = acc.totalDuration;    
-    return this.totalDuration
-}
+    }, {}).totalDuration;
+    return this.totalDuration;
+};
 
 const Workout = mongoose.model("Workout", workoutSchema);
 
